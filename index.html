@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -15,25 +17,28 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="text">Hello</div>
-			<input class="date" type="date" />
-			<select class="start">
-				<!-- <option value="7:00">7:00</option>
+			<div class="wrap">
+				<input class="date" type="date" />
+				<select class="start">
+					<!-- <option value="7:00">7:00</option>
 			<option value="7:30">7:30</option> -->
-			</select>
-			<select class="end">
-				<!-- <option value="7:00">7:00</option>
+				</select>
+				<select class="end">
+					<!-- <option value="7:00">7:00</option>
 			<option value="7:30">7:30</option> -->
-			</select>
-			<select class="lunch">
-				<option value="00:00">00:00</option>
-				<option value="00:30">00:30</option>
-				<option value="01:00">01:00</option>
-			</select>
-			<button class="btn btn-primary">Add time</button>
-			<button class="to_LS btn btn-info">to LS</button>
+				</select>
+				<select class="lunch">
+					<option value="00:00">00:00</option>
+					<option value="00:30">00:30</option>
+					<option value="01:00">01:00</option>
+				</select>
+				<button class="btn btn-primary">Add time</button>
+			</div>
+
+			<!-- <button class="to_LS btn btn-info">to LS</button>
 			<button class="from_LS btn btn-info">from LS</button>
-			<div class="card border-dark mb-3" style="max-width: 18rem">
+			<button class="firebase btn btn-info">firebase</button> -->
+			<div class="my-card">
 				<!-- <div class="date">03.04.2023</div>
 			<div class="work-hours">8:00 - 20:00</div> -->
 			</div>
@@ -54,33 +59,29 @@
 					</thead>
 					<tbody class="tbody">
 						<!-- <tr>
-						<td class="editable">2023-03-30</td>
-						<td>7:00</td>
-						<td>8:00</td>
-						<td>1:00</td>
-					</tr>
-					<tr>
-						<td class="editable">2023-03-31</td>
-						<td>7:00</td>
-						<td>9:00</td>
-						<td>2:00</td>
-					</tr> -->
+							<td class="editable">2023-03-30</td>
+							<td>7:00</td>
+							<td>8:00</td>
+							<td>1:00</td>
+						</tr>
+						<tr>
+							<td class="editable">2023-03-31</td>
+							<td>7:00</td>
+							<td>9:00</td>
+							<td>2:00</td>
+						</tr> -->
 					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row" colspan="4">Total</th>
+							<td class="total">77</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>
 
-		<script
-			src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"
-			type="module"
-		></script>
-		<script
-			src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"
-			type="module"
-		></script>
-		<script src="./firebase.js" type="module"></script>
-		<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+		<script src="./firebase.js"></script>
 		<script src="./app.js"></script>
 	</body>
 </html>

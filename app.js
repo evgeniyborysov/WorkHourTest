@@ -1,8 +1,9 @@
 window.addEventListener("load", () => {
 	console.log("Working!");
-	getDataFromLocalStorage();
+	getDatafromFirebase();
+	// getDataFromLocalStorage();
 	// drawCard(workWeek);
-	f2();
+	f2(workWeek);
 });
 
 const time = document.querySelector(".time");
@@ -14,138 +15,12 @@ const startSelect = document.querySelector(".start");
 const endSelect = document.querySelector(".end");
 const lunch = document.querySelector(".lunch");
 
-const card = document.querySelector(".card");
+const card = document.querySelector(".my-card");
 
 const btnSaveToLS = document.querySelector(".to_LS");
 const btnGetFromLS = document.querySelector(".from_LS");
-
-let cells;
-
-generateSelect(startSelect);
-generateSelect(endSelect);
-// drawCard(workWeek);
-
-function init() {
-	console.log("init");
-	// generateSelect(startSelect);
-	// generateSelect(endSelect);
-	// drawCard(workWeek);
-}
-
-function generateSelect(elem) {
-	for (let i = 6; i < 24; i++) {
-		for (let j = 0; j <= 30; j += 30) {
-			const hour = i.toString().padStart(2, "0");
-			const minute = j.toString().padStart(2, "0");
-			const time = `${hour}:${minute}`;
-			const option = document.createElement("option");
-			option.value = time;
-			option.text = time;
-			elem.add(option);
-		}
-	}
-}
-
-function drawTable(week) {
-	table.innerHTML = "";
-	week.forEach((item) => {
-		const tr = document.createElement("tr");
-		// tr.classList.add("table-primary");
-		tr.innerHTML = `
-						<td class="editable" id="${item.id}">${item.day}</td>
-						<td>${item.startTime}</td>
-						<td>${item.endTime}</td>
-                        <th>${item.lunchTime}</th>
-						<td>${item.workHour}</td>
-					`;
-		table.appendChild(tr);
-	});
-	cells = document.querySelectorAll(".editable");
-	editCells(cells);
-}
-
-function f2() {
-	// Використовуємо метод reduce, щоб обчислити суму всіх значень workHour
-	const totalWorkHours = workWeek.reduce((total, item) => {
-		const workHourParts = item.workHour.split(":");
-		const hours = Math.abs(parseInt(workHourParts[0]));
-		const minutes = Math.abs(parseInt(workHourParts[1]));
-		// const seconds = parseInt(workHourParts[2] || 0);
-
-		// Перетворюємо час у мілісекунди, щоб зручно здійснювати обчислення
-		const timeInMilliseconds = (hours * 3600 + minutes * 60) * 1000;
-
-		// Додаємо мілісекунди до загальної суми
-		return total + timeInMilliseconds;
-	}, 0);
-
-	// Перетворюємо загальний час у години, хвилини та секунди
-	const hours = Math.floor(totalWorkHours / (1000 * 60 * 60));
-	const minutes = Math.floor((totalWorkHours / (1000 * 60)) % 60);
-	// const seconds = Math.floor((totalWorkHours / 1000) % 60);
-
-	// Виводимо результат
-	console.log(`Total work hours: ${hours}:${minutes}`);
-}
-
-function calculateTimeElapsed(start, end, lunch = "00:00") {
-	const startTime = convertTimeToMinutes(start);
-	const endTime = convertTimeToMinutes(end);
-	const lunchTime = convertTimeToMinutes(lunch);
-
-	let timeElapsed = endTime - startTime - lunchTime;
-
-	if (timeElapsed < 0) {
-		timeElapsed += 1440;
-	}
-
-	const hours = Math.floor(timeElapsed / 60);
-	const minutes = timeElapsed % 60;
-
-	const formattedHours = formattedTime(hours);
-	const formattedMinutes = formattedTime(minutes);
-
-	return `${formattedHours}:${formattedMinutes}`;
-}
-
-function convertTimeToMinutes(time) {
-	const [hours, minutes] = time.split(":");
-	return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
-}
-
-function formattedTime(time) {
-	return time < 10 ? `0${time}` : `${time}`;
-}
-
-function formatDate(date) {
-	// const isoDate = date.toISOString();
-	// const formattedDate = isoDate.slice(0, 10);
-	const [year, month, day] = date.split("-");
-	return `${day}.${month}.${year}`;
-}
-
-function fn() {
-	const startWork = startSelect.value;
-	const endWork = endSelect.value;
-	const lunchTime = lunch.value;
-
-	const workHour = calculateTimeElapsed(startWork, endWork, lunchTime);
-
-	workWeek.push({
-		id: date.value,
-		day: formatDate(date.value),
-		startTime: startWork,
-		endTime: endWork,
-		lunchTime: lunchTime,
-		workHour: workHour,
-	});
-	console.log(workWeek);
-	drawTable(workWeek);
-	drawCard(workWeek);
-	f2();
-}
-
-btn.addEventListener("click", fn);
+const firebaseBTN = document.querySelector(".firebase");
+const totalHour = document.querySelector(".total");
 
 let workWeek = [
 	{
@@ -174,6 +49,171 @@ let workWeek = [
 	},
 ];
 
+async function getDatafromFirebase() {
+	let arr = [];
+	await db
+		.collection("TEST")
+		.get()
+		.then((res) => {
+			res.forEach((doc) => {
+				arr.push(doc.data());
+			});
+		});
+	console.log("APP", arr);
+	arr.sort((a, b) => {
+		const dateA = new Date(a.day.split(".").reverse().join("-"));
+		const dateB = new Date(b.day.split(".").reverse().join("-"));
+		return dateA - dateB;
+	});
+	// debugger;
+	drawTable(arr);
+	drawCard(arr);
+}
+
+function formattedTime(time) {
+	return time < 10 ? `0${time}` : `${time}`;
+}
+
+generateSelect(startSelect);
+generateSelect(endSelect);
+// drawCard(workWeek);
+
+function init() {
+	console.log("init");
+	// generateSelect(startSelect);
+	// generateSelect(endSelect);
+	// drawCard(workWeek);
+}
+
+function generateSelect(elem) {
+	for (let i = 6; i < 24; i++) {
+		for (let j = 0; j <= 30; j += 30) {
+			const hour = i.toString().padStart(2, "0");
+			const minute = j.toString().padStart(2, "0");
+			const time = `${hour}:${minute}`;
+			const option = document.createElement("option");
+			option.value = time;
+			option.text = time;
+			elem.add(option);
+		}
+	}
+}
+
+function drawTable(week) {
+	// debugger;
+	table.innerHTML = "";
+	totalHour.innerHTML = "";
+	week.forEach((item) => {
+		const tr = document.createElement("tr");
+		// tr.classList.add("table-primary");
+		tr.innerHTML = `
+						<td class="editable" id="${item.id}">${item.day}</td>
+						<td>${item.startTime}</td>
+						<td>${item.endTime}</td>
+                        <td>${item.lunchTime}</td>
+						<td>${item.workHour}</td>
+                        
+					`;
+		table.appendChild(tr);
+	});
+
+	const cells = document.querySelectorAll(".editable");
+	editCells(cells);
+	const a = f2(week);
+	totalHour.innerHTML = `${a.hours} : ${a.minutes}`;
+}
+
+function f2(workWeek) {
+	// Використовуємо метод reduce, щоб обчислити суму всіх значень workHour
+	const totalWorkHours = workWeek.reduce((total, item) => {
+		const workHourParts = item.workHour.split(":");
+		const hours = Math.abs(parseInt(workHourParts[0]));
+		const minutes = Math.abs(parseInt(workHourParts[1]));
+		// const seconds = parseInt(workHourParts[2] || 0);
+
+		// Перетворюємо час у мілісекунди, щоб зручно здійснювати обчислення
+		const timeInMilliseconds = (hours * 3600 + minutes * 60) * 1000;
+
+		// Додаємо мілісекунди до загальної суми
+		return total + timeInMilliseconds;
+	}, 0);
+
+	// Перетворюємо загальний час у години, хвилини та секунди
+	const hours = formattedTime(Math.floor(totalWorkHours / (1000 * 60 * 60)));
+	const minutes = formattedTime(
+		Math.floor((totalWorkHours / (1000 * 60)) % 60)
+	);
+	// const seconds = Math.floor((totalWorkHours / 1000) % 60);
+
+	// Виводимо результат
+	console.log(`Total work hours: ${hours}:${minutes}`);
+	return { hours, minutes };
+}
+
+function calculateTimeElapsed(start, end, lunch = "00:00") {
+	const startTime = convertTimeToMinutes(start);
+	const endTime = convertTimeToMinutes(end);
+	const lunchTime = convertTimeToMinutes(lunch);
+
+	let timeElapsed = endTime - startTime - lunchTime;
+
+	if (timeElapsed < 0) {
+		timeElapsed += 1440;
+	}
+
+	const hours = Math.floor(timeElapsed / 60);
+	const minutes = timeElapsed % 60;
+
+	const formattedHours = formattedTime(hours);
+	const formattedMinutes = formattedTime(minutes);
+
+	return `${formattedHours}:${formattedMinutes}`;
+}
+
+function convertTimeToMinutes(time) {
+	const [hours, minutes] = time.split(":");
+	return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+}
+
+function formatDate(date) {
+	// const isoDate = date.toISOString();
+	// const formattedDate = isoDate.slice(0, 10);
+	const [year, month, day] = date.split("-");
+	return `${day}.${month}.${year}`;
+}
+
+function fn() {
+	const startWork = startSelect.value;
+	const endWork = endSelect.value;
+	const lunchTime = lunch.value;
+
+	const workHour = calculateTimeElapsed(startWork, endWork, lunchTime);
+
+	let newDay = db.collection("TEST").add({
+		id: date.value,
+		day: formatDate(date.value),
+		startTime: startWork,
+		endTime: endWork,
+		lunchTime: lunchTime,
+		workHour: workHour,
+	});
+
+	workWeek.push({
+		id: date.value,
+		day: formatDate(date.value),
+		startTime: startWork,
+		endTime: endWork,
+		lunchTime: lunchTime,
+		workHour: workHour,
+	});
+	console.log(workWeek);
+	drawTable(workWeek);
+	drawCard(workWeek);
+	f2(workWeek);
+}
+
+btn.addEventListener("click", fn);
+
 drawTable(workWeek);
 
 function drawCard(arr) {
@@ -188,6 +228,7 @@ function drawCard(arr) {
 		return item.day === dateForCard;
 	});
 	const div = document.createElement("div");
+	div.classList.add("card-wrap");
 
 	if (itemForCard) {
 		card.innerHTML = "";
@@ -223,7 +264,7 @@ function getDataFromLocalStorage() {
 		});
 
 		// отримуємо всі комірки таблиці
-		cells = document.querySelectorAll(".editable");
+		const cells = document.querySelectorAll(".editable");
 		editCells(cells);
 		drawTable(workWeek);
 		drawCard(workWeek);

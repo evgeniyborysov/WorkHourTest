@@ -10,17 +10,19 @@ const firebaseConfig = {
 	measurementId: "G-W70TYWZ8FF",
 };
 
+// const arr = [];
+
 // Initialize Firebase
 
-// firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 // console.log("firebase");
 // const todo = db
-// 	.collection("TODO")
+// 	.collection("TEST")
 // 	.get()
-// 	.then((res) => {
-// 		res.forEach((doc) => {
-// 			console.log(doc.data());
+// 	.then((resp) => {
+// 		resp.forEach((doc) => {
+// 			arr.push(doc.data());
 // 		});
 // 	});
-// console.log(todo);
+// console.log(arr);
