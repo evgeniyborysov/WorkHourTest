@@ -13,36 +13,47 @@
 			crossorigin="anonymous"
 		/>
 		<link rel="stylesheet" href="style.css" />
-		<title>Document</title>
+		<title>Work schedule</title>
 	</head>
 	<body>
 		<div class="container">
 			<div class="wrap">
 				<input class="date" type="date" />
-				<select class="start">
-					<!-- <option value="7:00">7:00</option>
+				<div class="select-wrap">
+					<select class="start">
+						<!-- <option value="7:00">7:00</option>
 			<option value="7:30">7:30</option> -->
-				</select>
-				<select class="end">
-					<!-- <option value="7:00">7:00</option>
+					</select>
+					<select class="end">
+						<!-- <option value="7:00">7:00</option>
 			<option value="7:30">7:30</option> -->
-				</select>
-				<select class="lunch">
-					<option value="00:00">00:00</option>
-					<option value="00:30">00:30</option>
-					<option value="01:00">01:00</option>
-				</select>
-				<button class="btn btn-primary">Add time</button>
+					</select>
+					<select class="lunch">
+						<option value="00:00">00:00</option>
+						<option value="00:30">00:30</option>
+						<option value="01:00">01:00</option>
+					</select>
+				</div>
+
+				<button class="btn btn-primary">Add new day</button>
 			</div>
 
 			<!-- <button class="to_LS btn btn-info">to LS</button>
 			<button class="from_LS btn btn-info">from LS</button>
 			<button class="firebase btn btn-info">firebase</button> -->
-			<div class="my-card">
-				<!-- <div class="date">03.04.2023</div>
-			<div class="work-hours">8:00 - 20:00</div> -->
+			<div class="cards">
+				<div class="card-wrap">
+					<!-- <div class="day">Day</div>
+					<div class="time">07:00 - 19:00</div> -->
+					<!-- <div class="title">Вихідний</div> -->
+				</div>
+				<div class="card-wrap">
+					<div class="day">Day</div>
+					<!-- <div class="time">07:00 - 19:00</div> -->
+					<div class="title">Вихідний</div>
+				</div>
 			</div>
-			<div>
+			<div class="table-wrap">
 				<div class="month">April</div>
 				<table class="table table-striped">
 					<!-- <caption>
@@ -53,8 +64,8 @@
 							<th>Day</th>
 							<th>Start</th>
 							<th>End</th>
-							<th>Lunch Time</th>
-							<th>Work Hours</th>
+							<th>Lunch</th>
+							<th>Worked Out</th>
 						</tr>
 					</thead>
 					<tbody class="tbody">

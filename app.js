@@ -15,7 +15,7 @@ const startSelect = document.querySelector(".start");
 const endSelect = document.querySelector(".end");
 const lunch = document.querySelector(".lunch");
 
-const card = document.querySelector(".my-card");
+const cardContainer = document.querySelector(".cards");
 
 const btnSaveToLS = document.querySelector(".to_LS");
 const btnGetFromLS = document.querySelector(".from_LS");
@@ -216,31 +216,70 @@ btn.addEventListener("click", fn);
 
 drawTable(workWeek);
 
+function formatDateForCards(date) {
+	const formattedDate = date.toISOString().slice(0, 10);
+	const [year, month, day] = formattedDate.split("-");
+	return `${day}.${month}.${year}`;
+}
+
 function drawCard(arr) {
-	const now = new Date();
-	const isoDate = now.toISOString();
-	const formattedDate = isoDate.slice(0, 10);
-	const dateForCard = formatDate(formattedDate);
+	const today = new Date();
+	const tomorrow = new Date();
+	tomorrow.setDate(today.getDate() + 1);
 
-	// console.log(dateForCard);
+	const todayForCard = formatDateForCards(today);
+	const tomorrowForCard = formatDateForCards(tomorrow);
 
-	const itemForCard = arr.find((item) => {
-		return item.day === dateForCard;
-	});
+	console.log(tomorrowForCard);
+
 	const div = document.createElement("div");
-	div.classList.add("card-wrap");
+	div.classList.add("today");
 
-	if (itemForCard) {
-		card.innerHTML = "";
+	const itemForCardToday = arr.find((item) => {
+		return item.day === todayForCard;
+	});
+
+	const itemForCardTomorrow = arr.find((item) => {
+		return item.day === tomorrowForCard;
+	});
+
+	console.log(itemForCardToday);
+
+	// cardContainer;
+
+	if (itemForCardToday) {
+		cardContainer.innerHTML = "";
 		div.innerHTML = `			
-            <div class="date card-header">${itemForCard.day}</div>
-		    <div class="work-hours card-title">${itemForCard.startTime} - ${itemForCard.endTime}</div>
+            <div class="day">${itemForCardToday.day}</div>
+			<div class="time">${itemForCardToday.startTime} - ${itemForCardToday.endTime}</div>
         `;
-		card.appendChild(div);
+		cardContainer.appendChild(div);
 	} else {
-		card.innerHTML = "";
-		div.innerHTML = `<div class="date card-header">Вихідний</div>`;
-		card.appendChild(div);
+		cardContainer.innerHTML = "";
+		div.innerHTML = `
+            		<div class="day">${todayForCard}</div>
+					<div class="title">Вихідний</div>
+        `;
+		cardContainer.appendChild(div);
+	}
+
+	const div2 = document.createElement("div");
+	div2.classList.add("tomorrow");
+
+	if (itemForCardTomorrow) {
+		// cardContainer.innerHTML = "";
+		div2.innerHTML = `			
+            <div class="day">${itemForCardTomorrow.day}</div>
+			<div class="time">${itemForCardTomorrow.startTime} - ${itemForCardTomorrow.endTime}</div>
+        `;
+		cardContainer.appendChild(div2);
+	} else {
+		// cardContainer.innerHTML = "";
+		div2.innerHTML = `
+            		<div class="day">${tomorrowForCard}</div>
+					<div class="title">Вихідний</div>
+        `;
+		cardContainer.appendChild(div2);
 	}
 }
 
