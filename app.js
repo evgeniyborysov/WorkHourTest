@@ -68,6 +68,7 @@ async function getDatafromFirebase() {
 	// debugger;
 	drawTable(arr);
 	drawCard(arr);
+	f2(arr);
 }
 
 function formattedTime(time) {
@@ -198,18 +199,18 @@ function fn() {
 		workHour: workHour,
 	});
 
-	workWeek.push({
-		id: date.value,
-		day: formatDate(date.value),
-		startTime: startWork,
-		endTime: endWork,
-		lunchTime: lunchTime,
-		workHour: workHour,
-	});
-	console.log(workWeek);
-	drawTable(workWeek);
-	drawCard(workWeek);
-	f2(workWeek);
+	// workWeek.push({
+	// 	id: date.value,
+	// 	day: formatDate(date.value),
+	// 	startTime: startWork,
+	// 	endTime: endWork,
+	// 	lunchTime: lunchTime,
+	// 	workHour: workHour,
+	// });
+	// console.log(workWeek);
+	// drawTable(workWeek);
+	// drawCard(workWeek);
+	getDatafromFirebase();
 }
 
 btn.addEventListener("click", fn);
