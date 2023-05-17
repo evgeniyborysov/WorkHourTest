@@ -44,6 +44,15 @@ select {
 	border-radius: 5px;
 }
 
+.today {
+	background-color: aquamarine;
+}
+
+.day-name {
+	font-size: 15px;
+	font-weight: 600;
+}
+
 .month {
 	font-size: 15px;
 	font-weight: 600;

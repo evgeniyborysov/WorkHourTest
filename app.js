@@ -250,7 +250,8 @@ function drawCard(arr) {
 
 	if (itemForCardToday) {
 		cardContainer.innerHTML = "";
-		div.innerHTML = `			
+		div.innerHTML = `
+            <div class="day-name">Today</div>			
             <div class="day">${itemForCardToday.day}</div>
 			<div class="time">${itemForCardToday.startTime} - ${itemForCardToday.endTime}</div>
         `;
@@ -258,6 +259,7 @@ function drawCard(arr) {
 	} else {
 		cardContainer.innerHTML = "";
 		div.innerHTML = `
+                    <div class="day-name">Today</div>
             		<div class="day">${todayForCard}</div>
 					<div class="title">Вихідний</div>
         `;
@@ -269,7 +271,8 @@ function drawCard(arr) {
 
 	if (itemForCardTomorrow) {
 		// cardContainer.innerHTML = "";
-		div2.innerHTML = `			
+		div2.innerHTML = `
+        <div class="day-name">Tomorrow</div>			
             <div class="day">${itemForCardTomorrow.day}</div>
 			<div class="time">${itemForCardTomorrow.startTime} - ${itemForCardTomorrow.endTime}</div>
         `;
@@ -277,6 +280,7 @@ function drawCard(arr) {
 	} else {
 		// cardContainer.innerHTML = "";
 		div2.innerHTML = `
+        <div class="day-name">Tomorrow</div>
             		<div class="day">${tomorrowForCard}</div>
 					<div class="title">Вихідний</div>
         `;
