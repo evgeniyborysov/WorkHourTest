@@ -1,13 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap");
 body {
 	font-family: "Montserrat", sans-serif;
+	background-color: #e9ecef;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	/* transform: translateY(-180px); */
 }
 
 .wrap {
 	display: flex;
 	justify-content: space-around;
 	flex-wrap: wrap;
-	margin-top: 20px;
+	gap: 10px;
+	margin-top: 15px;
+
+	transition: opacity 1s ease-out;
+	opacity: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+.show-inputs {
+	opacity: 1;
+	height: auto;
 }
 
 .select-wrap {
@@ -15,22 +33,25 @@ body {
 	display: flex;
 	justify-content: space-around;
 	gap: 10px;
-	margin-top: 20px;
 }
 
-select {
-	width: 33.33%;
+.input-group-date {
+	justify-content: center;
+	flex-wrap: nowrap;
+}
+
+.input-group-date .date {
+	flex-grow: 1;
 }
 
 .btn {
-	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 .cards {
 	display: flex;
 	justify-content: space-around;
 	gap: 20px;
-	margin-top: 20px;
 }
 
 .card-wrap,
@@ -59,7 +80,7 @@ select {
 }
 
 .table-wrap {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 td,
@@ -67,15 +88,34 @@ th {
 	text-align: center;
 }
 
+.mb-3 {
+	margin: 0 !important;
+}
+
 @media (max-width: 440px) {
 	.total,
 	.btn,
 	.today,
 	.tomorrow,
+	.input-group-text,
+	.form-select,
 	th,
 	td,
 	select,
 	input {
-		font-size: 13px;
+		font-size: 13px !important;
+		padding: 5px !important;
+	}
+	/* .input-group-date .date {
+		width: 87%;
+	} */
+	.select-wrap {
+		flex-direction: column;
 	}
 }
+
+/* @media (min-width: 319px) {
+	.input-group-date .date {
+		width: 84%;
+	}
+} */

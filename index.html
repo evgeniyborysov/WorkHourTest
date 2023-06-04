@@ -18,58 +18,68 @@
 	<body>
 		<div class="container">
 			<div class="wrap">
-				<input class="date" type="date" />
+				<div class="input-group input-group-sm mb-3 input-group-date">
+					<span class="input-group-text" id="inputGroup-sizing-sm"
+						>Дата</span
+					>
+					<input class="date" type="date" />
+				</div>
 				<div class="select-wrap">
-					<select class="start">
-						<!-- <option value="7:00">7:00</option>
-			<option value="7:30">7:30</option> -->
-					</select>
-					<select class="end">
-						<!-- <option value="7:00">7:00</option>
-			<option value="7:30">7:30</option> -->
-					</select>
-					<select class="lunch">
+					<div class="input-group input-group-sm mb-3">
+						<label class="input-group-text" for="inputGroupSelect01"
+							>Початок</label
+						>
+						<select
+							class="form-select start"
+							id="inputGroupSelect01"
+						>
+							<option selected>Choose...</option>
+						</select>
+					</div>
+					<div class="input-group input-group-sm mb-3">
+						<label class="input-group-text" for="inputGroupSelect01"
+							>Закінчення</label
+						>
+						<select class="form-select end" id="inputGroupSelect01">
+							<option selected>Choose...</option>
+						</select>
+					</div>
+				</div>
+				<div class="input-group input-group-sm mb-3">
+					<label class="input-group-text" for="inputGroupSelect01"
+						>Обід</label
+					>
+					<select class="form-select lunch" id="inputGroupSelect01">
+						<option selected>Choose...</option>
 						<option value="00:00">00:00</option>
 						<option value="00:30">00:30</option>
 						<option value="01:00">01:00</option>
 					</select>
 				</div>
 
-				<button class="btn btn-primary">Add new day</button>
+				<button class="btn btn-primary">Додати новий день</button>
 			</div>
+			<div class="content">
+				<button class="show-inputs btn btn-info">Додати +</button>
 
-			<!-- <button class="to_LS btn btn-info">to LS</button>
-			<button class="from_LS btn btn-info">from LS</button>
-			<button class="firebase btn btn-info">firebase</button> -->
-			<div class="cards">
-				<div class="card-wrap">
-					<!-- <div class="day">Day</div>
-					<div class="time">07:00 - 19:00</div> -->
-					<!-- <div class="title">Вихідний</div> -->
-				</div>
-				<div class="card-wrap">
-					<div class="day">Day</div>
-					<!-- <div class="time">07:00 - 19:00</div> -->
-					<div class="title">Вихідний</div>
-				</div>
-			</div>
-			<div class="table-wrap">
-				<div class="month">May</div>
-				<table class="table table-striped">
-					<!-- <caption>
+				<div class="cards"></div>
+				<div class="table-wrap">
+					<div class="month">Червень</div>
+					<table class="table table-striped">
+						<!-- <caption>
 					Caption
 				</caption> -->
-					<thead>
-						<tr>
-							<th>Day</th>
-							<th>Start</th>
-							<th>End</th>
-							<th>Lunch</th>
-							<th>Worked Out</th>
-						</tr>
-					</thead>
-					<tbody class="tbody">
-						<!-- <tr>
+						<thead>
+							<tr>
+								<th>Дата</th>
+								<th>День</th>
+								<th>Поч</th>
+								<th>Зак</th>
+								<th>Відпр</th>
+							</tr>
+						</thead>
+						<tbody class="tbody">
+							<!-- <tr>
 							<td class="editable">2023-03-30</td>
 							<td>7:00</td>
 							<td>8:00</td>
@@ -81,14 +91,15 @@
 							<td>9:00</td>
 							<td>2:00</td>
 						</tr> -->
-					</tbody>
-					<tfoot>
-						<tr>
-							<th scope="row" colspan="4">Total</th>
-							<td class="total">77</td>
-						</tr>
-					</tfoot>
-				</table>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th scope="row" colspan="4">Всього годин</th>
+								<td class="total"></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 			</div>
 		</div>
 

@@ -1,9 +1,7 @@
 window.addEventListener("load", () => {
-	console.log("Working!");
 	getDatafromFirebase();
-	// getDataFromLocalStorage();
-	// drawCard(workWeek);
 	f2(workWeek);
+	init();
 });
 
 const time = document.querySelector(".time");
@@ -17,10 +15,21 @@ const lunch = document.querySelector(".lunch");
 
 const cardContainer = document.querySelector(".cards");
 
-const btnSaveToLS = document.querySelector(".to_LS");
-const btnGetFromLS = document.querySelector(".from_LS");
-const firebaseBTN = document.querySelector(".firebase");
+const inputsBlock = document.querySelector(".wrap");
+const btnShowInputs = document.querySelector(".show-inputs");
+console.log(btnShowInputs);
+
 const totalHour = document.querySelector(".total");
+
+const daysOfWeek = [
+	"Неділя",
+	"Понеділок",
+	"Вівторок",
+	"Середа",
+	"Четвер",
+	"П'ятниця",
+	"Субота",
+];
 
 let workWeek = [
 	{
@@ -31,23 +40,14 @@ let workWeek = [
 		lunchTime: "01:00",
 		workHour: "11:00",
 	},
-	{
-		id: "20230405",
-		day: "05.04.2023",
-		startTime: "07:00",
-		endTime: "19:30",
-		lunchTime: "01:00",
-		workHour: "11:30",
-	},
-	{
-		id: "20230406",
-		day: "06.04.2023",
-		startTime: "08:30",
-		endTime: "20:30",
-		lunchTime: "01:00",
-		workHour: "11:00",
-	},
 ];
+
+const init = () => {
+	btnShowInputs.addEventListener("click", () => {
+		console.log(inputsBlock);
+		inputsBlock.classList.toggle("show-inputs");
+	});
+};
 
 async function getDatafromFirebase() {
 	let arr = [];
@@ -59,13 +59,13 @@ async function getDatafromFirebase() {
 				arr.push(doc.data());
 			});
 		});
-	console.log("APP", arr);
+	// console.log("APP", arr);
 	arr.sort((a, b) => {
 		const dateA = new Date(a.day.split(".").reverse().join("-"));
 		const dateB = new Date(b.day.split(".").reverse().join("-"));
 		return dateA - dateB;
 	});
-	// debugger;
+
 	drawTable(arr);
 	drawCard(arr);
 	f2(arr);
@@ -78,13 +78,6 @@ function formattedTime(time) {
 generateSelect(startSelect);
 generateSelect(endSelect);
 // drawCard(workWeek);
-
-function init() {
-	console.log("init");
-	// generateSelect(startSelect);
-	// generateSelect(endSelect);
-	// drawCard(workWeek);
-}
 
 function generateSelect(elem) {
 	for (let i = 6; i < 24; i++) {
@@ -101,7 +94,6 @@ function generateSelect(elem) {
 }
 
 function drawTable(week) {
-	// debugger;
 	table.innerHTML = "";
 	totalHour.innerHTML = "";
 	week.forEach((item) => {
@@ -109,9 +101,9 @@ function drawTable(week) {
 		// tr.classList.add("table-primary");
 		tr.innerHTML = `
 						<td class="editable" id="${item.id}">${item.day}</td>
+                        <td>${item.dayOfWeek}</td>
 						<td>${item.startTime}</td>
 						<td>${item.endTime}</td>
-                        <td>${item.lunchTime}</td>
 						<td>${item.workHour}</td>
                         
 					`;
@@ -147,7 +139,7 @@ function f2(workWeek) {
 	// const seconds = Math.floor((totalWorkHours / 1000) % 60);
 
 	// Виводимо результат
-	console.log(`Total work hours: ${hours}:${minutes}`);
+
 	return { hours, minutes };
 }
 
@@ -180,6 +172,23 @@ function formatDate(date) {
 	// const isoDate = date.toISOString();
 	// const formattedDate = isoDate.slice(0, 10);
 	const [year, month, day] = date.split("-");
+	console.log(year, month, day);
+	return `${day}.${month}.${year}`;
+}
+
+function findDayOfWeek(dateString) {
+	const date = new Date(dateString);
+
+	const dayOfWeek = date.getDay();
+	console.log(daysOfWeek[dayOfWeek]);
+
+	return daysOfWeek[dayOfWeek];
+}
+
+function formatDateForCards(date) {
+	const formattedDate = date.toISOString().slice(0, 10);
+	const [year, month, day] = formattedDate.split("-");
+	console.log(year, month, day);
 	return `${day}.${month}.${year}`;
 }
 
@@ -193,35 +202,18 @@ function fn() {
 	let newDay = db.collection("TEST").add({
 		id: date.value,
 		day: formatDate(date.value),
+		dayOfWeek: findDayOfWeek(date.value),
 		startTime: startWork,
 		endTime: endWork,
 		lunchTime: lunchTime,
 		workHour: workHour,
 	});
-
-	// workWeek.push({
-	// 	id: date.value,
-	// 	day: formatDate(date.value),
-	// 	startTime: startWork,
-	// 	endTime: endWork,
-	// 	lunchTime: lunchTime,
-	// 	workHour: workHour,
-	// });
-	// console.log(workWeek);
-	// drawTable(workWeek);
-	// drawCard(workWeek);
 	getDatafromFirebase();
 }
 
 btn.addEventListener("click", fn);
 
 drawTable(workWeek);
-
-function formatDateForCards(date) {
-	const formattedDate = date.toISOString().slice(0, 10);
-	const [year, month, day] = formattedDate.split("-");
-	return `${day}.${month}.${year}`;
-}
 
 function drawCard(arr) {
 	const today = new Date();
@@ -244,14 +236,12 @@ function drawCard(arr) {
 		return item.day === tomorrowForCard;
 	});
 
-	console.log(itemForCardToday);
-
 	// cardContainer;
 
 	if (itemForCardToday) {
 		cardContainer.innerHTML = "";
 		div.innerHTML = `
-            <div class="day-name">Today</div>			
+            <div class="day-name">Сьогодні</div>			
             <div class="day">${itemForCardToday.day}</div>
 			<div class="time">${itemForCardToday.startTime} - ${itemForCardToday.endTime}</div>
         `;
@@ -259,7 +249,7 @@ function drawCard(arr) {
 	} else {
 		cardContainer.innerHTML = "";
 		div.innerHTML = `
-                    <div class="day-name">Today</div>
+                    <div class="day-name">Сьогодні</div>
             		<div class="day">${todayForCard}</div>
 					<div class="title">Вихідний</div>
         `;
@@ -272,7 +262,7 @@ function drawCard(arr) {
 	if (itemForCardTomorrow) {
 		// cardContainer.innerHTML = "";
 		div2.innerHTML = `
-        <div class="day-name">Tomorrow</div>			
+        <div class="day-name">Завтра</div>			
             <div class="day">${itemForCardTomorrow.day}</div>
 			<div class="time">${itemForCardTomorrow.startTime} - ${itemForCardTomorrow.endTime}</div>
         `;
@@ -280,7 +270,7 @@ function drawCard(arr) {
 	} else {
 		// cardContainer.innerHTML = "";
 		div2.innerHTML = `
-        <div class="day-name">Tomorrow</div>
+        <div class="day-name">Завтра</div>
             		<div class="day">${tomorrowForCard}</div>
 					<div class="title">Вихідний</div>
         `;
@@ -320,6 +310,10 @@ btnSaveToLS.addEventListener("click", () => {
 	saveDataToLocalStorage(workWeek);
 });
 
+btnShowInputs.addEventListener("click", () => {
+	console.log("click");
+});
+
 function editCells(cells) {
 	// додаємо обробник події для кожної комірки
 	cells.forEach(function (cell) {
@@ -353,5 +347,3 @@ function editCells(cells) {
 		});
 	});
 }
-
-init();
