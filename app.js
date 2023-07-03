@@ -31,17 +31,6 @@ const daysOfWeek = [
 	"Субота",
 ];
 
-let workWeek = [
-	{
-		id: "20230403",
-		day: "03.04.2023",
-		startTime: "07:00",
-		endTime: "19:00",
-		lunchTime: "01:00",
-		workHour: "11:00",
-	},
-];
-
 const init = () => {
 	btnShowInputs.addEventListener("click", () => {
 		console.log(inputsBlock);
