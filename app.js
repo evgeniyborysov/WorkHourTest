@@ -1,7 +1,6 @@
 window.addEventListener("load", () => {
 	getDatafromFirebase();
 	f2(workWeek);
-	init();
 });
 
 const time = document.querySelector(".time");
@@ -31,12 +30,10 @@ const daysOfWeek = [
 	"Субота",
 ];
 
-const init = () => {
-	btnShowInputs.addEventListener("click", () => {
-		console.log(inputsBlock);
-		inputsBlock.classList.toggle("show-inputs");
-	});
-};
+btnShowInputs.addEventListener("click", () => {
+	console.log(inputsBlock);
+	inputsBlock.classList.toggle("show-inputs");
+});
 
 async function getDatafromFirebase() {
 	let arr = [];
