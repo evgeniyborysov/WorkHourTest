@@ -1,24 +1,18 @@
-window.addEventListener("load", () => {
-	getDatafromFirebase();
-	f2(workWeek);
+window.addEventListener("DOMContentLoaded", () => {
+	getData();
 });
 
 const time = document.querySelector(".time");
 const date = document.querySelector(".date");
-const btn = document.querySelector(".btn");
+const btnAddNewDay = document.querySelector(".add-new-day");
 const table = document.querySelector(".tbody");
-
 const startSelect = document.querySelector(".start");
 const endSelect = document.querySelector(".end");
 const lunch = document.querySelector(".lunch");
-
 const cardContainer = document.querySelector(".cards");
-
 const inputsBlock = document.querySelector(".wrap");
 const btnShowInputs = document.querySelector(".show-inputs");
-console.log(btnShowInputs);
-
-const totalHour = document.querySelector(".total");
+const totalHour = document.querySelector(".total-hour");
 
 const daysOfWeek = [
 	"Неділя",
@@ -31,18 +25,17 @@ const daysOfWeek = [
 ];
 
 btnShowInputs.addEventListener("click", () => {
-	console.log(inputsBlock);
 	inputsBlock.classList.toggle("show-inputs");
 });
 
-async function getDatafromFirebase() {
+async function getData() {
 	let arr = [];
 	await db
 		.collection("TEST")
 		.get()
 		.then((res) => {
 			res.forEach((doc) => {
-				arr.push(doc.data());
+				arr.push({ id: doc.id, ...doc.data() });
 			});
 		});
 	// console.log("APP", arr);
@@ -54,16 +47,12 @@ async function getDatafromFirebase() {
 
 	drawTable(arr);
 	drawCard(arr);
-	f2(arr);
+	getWorkedHours(arr);
 }
 
 function formattedTime(time) {
 	return time < 10 ? `0${time}` : `${time}`;
 }
-
-generateSelect(startSelect);
-generateSelect(endSelect);
-// drawCard(workWeek);
 
 function generateSelect(elem) {
 	for (let i = 6; i < 24; i++) {
@@ -79,30 +68,57 @@ function generateSelect(elem) {
 	}
 }
 
+//<img width="24" height="24" src="https://img.icons8.com/material-outlined/24/000000/delete-trash.png" alt="delete-trash"/>
+
 function drawTable(week) {
 	table.innerHTML = "";
 	totalHour.innerHTML = "";
 	week.forEach((item) => {
 		const tr = document.createElement("tr");
-		// tr.classList.add("table-primary");
+		tr.classList.add("string-hover");
+		tr.id = item.id;
 		tr.innerHTML = `
-						<td class="editable" id="${item.id}">${item.day}</td>
+						<td class="editable">${item.day}</td>
                         <td>${item.dayOfWeek}</td>
 						<td>${item.startTime}</td>
 						<td>${item.endTime}</td>
 						<td>${item.workHour}</td>
+                        <td><button class="btn btn-delete"><img width="24" height="24" src="https://img.icons8.com/material-outlined/24/000000/delete-trash.png" alt="delete-trash"/></button></td>
                         
 					`;
 		table.appendChild(tr);
 	});
 
-	const cells = document.querySelectorAll(".editable");
-	editCells(cells);
-	const a = f2(week);
-	totalHour.innerHTML = `${a.hours} : ${a.minutes}`;
+	// const cells = document.querySelectorAll(".editable");
+	// editCells(cells);
+	const total = getWorkedHours(week);
+	totalHour.innerHTML = `${total.hours} : ${total.minutes}`;
+	eventHanger(document.querySelectorAll(".btn-delete"));
 }
 
-function f2(workWeek) {
+function eventHanger(nodeList) {
+	nodeList.forEach((item) => {
+		item.addEventListener("click", deleteDay);
+	});
+}
+
+function deleteDay() {
+	const ID = this.parentNode.parentNode.id;
+	// console.log(ID);
+
+	db.collection("TEST")
+		.doc(ID)
+		.delete()
+		.then(() => {
+			getData();
+			console.log("Document successfully deleted!");
+		})
+		.catch((error) => {
+			console.error("Error removing document: ", error);
+		});
+}
+
+function getWorkedHours(workWeek) {
 	// Використовуємо метод reduce, щоб обчислити суму всіх значень workHour
 	const totalWorkHours = workWeek.reduce((total, item) => {
 		const workHourParts = item.workHour.split(":");
@@ -158,7 +174,7 @@ function formatDate(date) {
 	// const isoDate = date.toISOString();
 	// const formattedDate = isoDate.slice(0, 10);
 	const [year, month, day] = date.split("-");
-	console.log(year, month, day);
+	// console.log(year, month, day);
 	return `${day}.${month}.${year}`;
 }
 
@@ -166,7 +182,7 @@ function findDayOfWeek(dateString) {
 	const date = new Date(dateString);
 
 	const dayOfWeek = date.getDay();
-	console.log(daysOfWeek[dayOfWeek]);
+	// console.log(daysOfWeek[dayOfWeek]);
 
 	return daysOfWeek[dayOfWeek];
 }
@@ -174,19 +190,19 @@ function findDayOfWeek(dateString) {
 function formatDateForCards(date) {
 	const formattedDate = date.toISOString().slice(0, 10);
 	const [year, month, day] = formattedDate.split("-");
-	console.log(year, month, day);
+	// console.log(year, month, day);
 	return `${day}.${month}.${year}`;
 }
 
-function fn() {
+function addNewDay() {
 	const startWork = startSelect.value;
 	const endWork = endSelect.value;
 	const lunchTime = lunch.value;
 
 	const workHour = calculateTimeElapsed(startWork, endWork, lunchTime);
 
-	let newDay = db.collection("TEST").add({
-		id: date.value,
+	db.collection("TEST").add({
+		// id: date.value,
 		day: formatDate(date.value),
 		dayOfWeek: findDayOfWeek(date.value),
 		startTime: startWork,
@@ -194,12 +210,10 @@ function fn() {
 		lunchTime: lunchTime,
 		workHour: workHour,
 	});
-	getDatafromFirebase();
+	getData();
 }
 
-btn.addEventListener("click", fn);
-
-drawTable(workWeek);
+btnAddNewDay.addEventListener("click", addNewDay);
 
 function drawCard(arr) {
 	const today = new Date();
@@ -209,7 +223,7 @@ function drawCard(arr) {
 	const todayForCard = formatDateForCards(today);
 	const tomorrowForCard = formatDateForCards(tomorrow);
 
-	console.log(tomorrowForCard);
+	// console.log(tomorrowForCard);
 
 	const div = document.createElement("div");
 	div.classList.add("today");
@@ -221,8 +235,6 @@ function drawCard(arr) {
 	const itemForCardTomorrow = arr.find((item) => {
 		return item.day === tomorrowForCard;
 	});
-
-	// cardContainer;
 
 	if (itemForCardToday) {
 		cardContainer.innerHTML = "";
@@ -264,42 +276,6 @@ function drawCard(arr) {
 	}
 }
 
-function saveDataToLocalStorage(arr) {
-	// Конвертуємо масив у формат JSON
-	const arrJSON = JSON.stringify(arr);
-	// Зберігаємо масив у локальному сховищі під ключем "myArray"
-	localStorage.setItem("myArray", arrJSON);
-}
-
-function getDataFromLocalStorage() {
-	// Отримуємо масив з локального сховища
-	const arrJSON = localStorage.getItem("myArray");
-	if (arrJSON.length) {
-		// Конвертуємо рядок JSON у масив
-		workWeek = JSON.parse(arrJSON);
-		workWeek.sort((a, b) => {
-			const dateA = new Date(a.day.split(".").reverse().join("-"));
-			const dateB = new Date(b.day.split(".").reverse().join("-"));
-			return dateA - dateB;
-		});
-
-		// отримуємо всі комірки таблиці
-		const cells = document.querySelectorAll(".editable");
-		editCells(cells);
-		drawTable(workWeek);
-		drawCard(workWeek);
-	}
-}
-
-btnGetFromLS.addEventListener("click", getDataFromLocalStorage);
-btnSaveToLS.addEventListener("click", () => {
-	saveDataToLocalStorage(workWeek);
-});
-
-btnShowInputs.addEventListener("click", () => {
-	console.log("click");
-});
-
 function editCells(cells) {
 	// додаємо обробник події для кожної комірки
 	cells.forEach(function (cell) {
@@ -333,3 +309,7 @@ function editCells(cells) {
 		});
 	});
 }
+
+/// functions call
+generateSelect(startSelect);
+generateSelect(endSelect);

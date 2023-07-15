@@ -44,7 +44,7 @@ body {
 	flex-grow: 1;
 }
 
-.btn {
+.show-inputs {
 	margin-bottom: 10px;
 }
 
@@ -83,17 +83,41 @@ body {
 	margin-top: 10px;
 }
 
+/* .table {
+	overflow: hidden;
+} */
+
+/* .string-hover:hover {
+	
+} */
+
 td,
 th {
 	text-align: center;
+	vertical-align: middle;
+}
+
+.total-title {
+	text-align: left;
+}
+
+.total-hour {
+	font-weight: 600;
 }
 
 .mb-3 {
 	margin: 0 !important;
 }
 
+.btn-delete {
+	padding: 0;
+}
+
+.table > :not(caption) > * > * {
+	padding: 3px;
+}
+
 @media (max-width: 440px) {
-	.total,
 	.btn,
 	.today,
 	.tomorrow,
@@ -104,13 +128,17 @@ th {
 	select,
 	input {
 		font-size: 13px !important;
-		padding: 5px !important;
+		padding: 3px !important;
 	}
 	/* .input-group-date .date {
 		width: 87%;
 	} */
 	.select-wrap {
 		flex-direction: column;
+	}
+	img {
+		width: 80%;
+		height: auto;
 	}
 }
 

@@ -57,18 +57,20 @@
 					</select>
 				</div>
 
-				<button class="btn btn-primary">Додати новий день</button>
+				<button class="btn btn-primary add-new-day">
+					Додати новий день
+				</button>
 			</div>
 			<div class="content">
-				<button class="show-inputs btn btn-info">Додати +</button>
+				<button class="btn btn-info show-inputs">Додати +</button>
 
 				<div class="cards"></div>
 				<div class="table-wrap">
 					<div class="month">Липень</div>
 					<table class="table table-striped">
 						<!-- <caption>
-					Caption
-				</caption> -->
+							Caption
+						</caption> -->
 						<thead>
 							<tr>
 								<th>Дата</th>
@@ -76,6 +78,14 @@
 								<th>Поч</th>
 								<th>Зак</th>
 								<th>Відпр</th>
+								<th>
+									<img
+										width="24"
+										height="24"
+										src="https://img.icons8.com/material-outlined/24/000000/delete-trash.png"
+										alt="delete-trash"
+									/>
+								</th>
 							</tr>
 						</thead>
 						<tbody class="tbody">
@@ -94,8 +104,14 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<th scope="row" colspan="4">Всього годин</th>
-								<td class="total"></td>
+								<th class="total-title" scope="row" colspan="4">
+									Всього годин
+								</th>
+								<td
+									class="total-hour"
+									scope="row"
+									colspan="2"
+								></td>
 							</tr>
 						</tfoot>
 					</table>
